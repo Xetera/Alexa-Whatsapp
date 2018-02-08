@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+
 import time
 import re
 import commands
@@ -9,14 +10,20 @@ from youtube import YoutubeClient
 
 from webwhatsapi import WhatsAPIDriver
 from webwhatsapi.objects.message import Message
+import secret
+import sys
+# sys.setdefaultencoding() does not exist, here!
+reload(sys)  # Reload does the trick!
+sys.setdefaultencoding('UTF8')
 
 youtube = YoutubeClient()
 alexa = Alexa()
 
 
-def get_mention(msg):
-	# print msg.js_obj
-	return '@{}'.format(msg.js_obj['sender']['pushname'])
+def get_phone_number(msg):
+	# regex matching id to phone number
+	phone = re.search('\d+(?=@\w.\w{2,3})', msg.js_obj['sender']['id']).group(0)
+	return '@{}'.format(phone)
 
 
 def group_handler(msg):
@@ -25,13 +32,16 @@ def group_handler(msg):
 
 def parse(msg, cnt):
 	if msg.safe_content == "":
-		# when people send emojis
+		# message is empty i.e. there was an emoji
 		return
 	elif re.search('alexa', msg.safe_content, re.IGNORECASE):
+		# heard alexa
 		reply = alexa.say(msg.safe_content)
 		cnt.chat.send_message(reply)
 		return
+
 	elif msg.safe_content[0] != '!':
+		# message didn't start with !
 		return
 
 	arg_array = msg.safe_content.strip().split(' ')
@@ -45,20 +55,21 @@ def parse(msg, cnt):
 		cnt.chat.send_message(commands.info())
 
 	elif command.lower() == 'discord':
-		cnt.chat.send_message('{} {}'.format(get_mention(msg), commands.discord()))
+		cnt.chat.send_message('{} {}'.format(get_phone_number(msg), commands.discord()))
 
 	elif command.lower() == 'youtube' or command.lower() == 'song':
 		response = youtube.get_video(' '.join(args))
 		print response
 		cnt.chat.send_message(response)
+	elif command.lower() == 'mention':
+		cnt.chat.send_message(get_phone_number(msg))
 
-
-
+	# stub
 	if msg.js_obj['isGroupMsg']:
 		group_handler(msg)
 
 
-driver = WhatsAPIDriver(profile='C:\\Users\\Ali\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\alx932ri.Xetera')
+driver = WhatsAPIDriver(profile=secret.PROFILE)
 print "Waiting for QR"
 driver.wait_for_login()
 

@@ -26,15 +26,15 @@ class Alexa:
 
 	def _format_question(self, text):
 		"""Replacing the word alexa to avoid confusing cleverbot"""
-		return re.sub('alexa', 'cleverbot', text, re.IGNORECASE)
+		return re.sub(constants.TRIGGER_WORD, 'cleverbot', text, re.IGNORECASE)
 
 	def say(self, text):
 		"""Ask alexa a question"""
-		print "Asking alexa..."
+		print "Asking {}...".format(constants.TRIGGER_WORD)
 		interaction = urllib.quote_plus(self._format_question(text))
 		query = self._format_query_endpoint(interaction)
 		r = requests.get(query)
 		reply = r.json()['output']
-		print "Alexa replied: {}".format(reply)
+		print "{0} replied: {1}".format(constants.TRIGGER_WORD, reply)
 		return reply
 

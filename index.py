@@ -11,6 +11,8 @@ from youtube import YoutubeClient
 from webwhatsapi import WhatsAPIDriver
 from webwhatsapi.objects.message import Message
 import secret
+import constants
+
 """
 import sys
 # sys.setdefaultencoding() does not exist, here!
@@ -31,12 +33,17 @@ def group_handler(msg):
 	pass
 
 
+def change_trigger_word(cnt, word):
+	previous_trigger = constants.TRIGGER_WORD
+	constants.TRIGGER_WORD = word
+	cnt.chat.send_message("OK, I was listening for {} but I'll respond to {} from now.".format(previous_trigger, word))
+
 def parse(msg, cnt):
-	if msg.safe_content == "" or not msg.safe_content:
+	if not msg.safe_content or msg.safe_content == "":
 		# message is empty i.e. there was an emoji
 		return
-	elif re.search('alexa', msg.safe_content, re.IGNORECASE):
-		# heard alexa
+	elif re.search("({}|@{})".format(constants.TRIGGER_WORD, secret.BOT_PHONE_NUMBER), msg.safe_content, re.IGNORECASE):
+		# upon hearing trigger word
 		reply = alexa.say(msg.safe_content)
 		cnt.chat.send_message(reply)
 		return
@@ -61,9 +68,14 @@ def parse(msg, cnt):
 	elif command.lower() == 'youtube' or command.lower() == 'song':
 		response = youtube.get_video(' '.join(args))
 		print response
+
 		cnt.chat.send_message(response)
 	elif command.lower() == 'mention':
 		cnt.chat.send_message(get_phone_number(msg))
+
+	elif command.lower() == 'respond':
+		change_trigger_word(cnt, args[0])
+
 
 	# stub
 	if msg.js_obj['isGroupMsg']:

@@ -11,11 +11,12 @@ from youtube import YoutubeClient
 from webwhatsapi import WhatsAPIDriver
 from webwhatsapi.objects.message import Message
 import secret
+"""
 import sys
 # sys.setdefaultencoding() does not exist, here!
 reload(sys)  # Reload does the trick!
 sys.setdefaultencoding('UTF8')
-
+"""
 youtube = YoutubeClient()
 alexa = Alexa()
 
@@ -31,7 +32,7 @@ def group_handler(msg):
 
 
 def parse(msg, cnt):
-	if msg.safe_content == "":
+	if msg.safe_content == "" or not msg.safe_content:
 		# message is empty i.e. there was an emoji
 		return
 	elif re.search('alexa', msg.safe_content, re.IGNORECASE):

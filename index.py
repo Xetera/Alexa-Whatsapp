@@ -38,7 +38,12 @@ def change_trigger_word(cnt, word):
 	constants.TRIGGER_WORD = word
 	cnt.chat.send_message("OK, I was listening for {} but I'll respond to {} from now.".format(previous_trigger, word))
 
-def parse(msg, cnt):
+
+def parse_audio(msg, cnt):
+	pass
+
+
+def parse_message(msg, cnt):
 	if not msg.safe_content or msg.safe_content == "":
 		# message is empty i.e. there was an emoji
 		return
@@ -93,9 +98,11 @@ while True:
 	for contact in driver.get_unread():
 		for message in contact.messages:
 			if isinstance(message, Message):  # Currently works for text messages only.
-
 				print message
-				# print message.js_obj
-				# print message.js_obj['isGroupMsg']
-				parse(message, contact)
+				if message.js_obj['type'] == 'ptt':
+					parse_audio(message, contact)
+					break
+				elif message.js_obj['type'] == 'chat':
+					parse_message(message, contact)
+	
 

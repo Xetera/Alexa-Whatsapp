@@ -10,8 +10,9 @@ Switch to your python2 environment by doing `source activate python2` or just `a
 
 `pip install webwhatsapi` to install the dependencies.
 
+Get a cleverbot key from [here](https://www.cleverbot.com/api/) and add it to `secret.py`
 
-
+run using `python index.py`
 
 ## Features
 * Talk to alexa by mentioning her name or pinging her (it's actually cleverbot but shhh) and have her 

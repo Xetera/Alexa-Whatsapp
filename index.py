@@ -1,26 +1,25 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-
 import time
 import re
 import commands
 from alexa import Alexa
 from youtube import YoutubeClient
-
-from webwhatsapi import WhatsAPIDriver
-from webwhatsapi.objects.message import Message
 import secret
 import constants
 
-"""
-import sys
-# sys.setdefaultencoding() does not exist, here!
-reload(sys)  # Reload does the trick!
-sys.setdefaultencoding('UTF8')
-"""
-youtube = YoutubeClient()
+from webwhatsapi import WhatsAPIDriver
+from webwhatsapi.objects.message import Message
+
+
+if secret.YOUTUBE_API_KEY:
+	youtube = YoutubeClient()
+
 alexa = Alexa()
+
+
+def configure():
+	pass # configuring settings here
 
 
 def get_phone_number(msg):
@@ -30,7 +29,7 @@ def get_phone_number(msg):
 
 
 def group_handler(msg):
-	pass
+	pass  # TODO
 
 
 def change_trigger_word(cnt, word):
@@ -40,12 +39,12 @@ def change_trigger_word(cnt, word):
 
 
 def parse_audio(msg, cnt):
-	pass
+	pass  # when audio is received
 
 
 def parse_message(msg, cnt):
 	if not msg.safe_content or msg.safe_content == "":
-		# message is empty i.e. there was an emoji
+		# message is empty. Triggered when messages only contain emojis
 		return
 	elif re.search("({}|@{})".format(constants.TRIGGER_WORD, secret.BOT_PHONE_NUMBER), msg.safe_content, re.IGNORECASE):
 		# upon hearing trigger word
@@ -57,12 +56,9 @@ def parse_message(msg, cnt):
 		# message didn't start with !
 		return
 
-	arg_array = msg.safe_content.strip().split(' ')
-	command = arg_array[0][1:]
-	args = arg_array[1:]
-
-	print command
-	print args
+	parsed_message = msg.safe_content.strip().split(' ')
+	command = parsed_message[0][1:]  # single command
+	args = parsed_message[1:]        # args are in a list split by the word
 
 	if command.lower() == 'info':
 		cnt.chat.send_message(commands.info())
@@ -71,10 +67,11 @@ def parse_message(msg, cnt):
 		cnt.chat.send_message('{} {}'.format(get_phone_number(msg), commands.discord()))
 
 	elif command.lower() == 'youtube' or command.lower() == 'song':
+		if not youtube:
+			return
 		response = youtube.get_video(' '.join(args))
-		print response
-
 		cnt.chat.send_message(response)
+
 	elif command.lower() == 'mention':
 		cnt.chat.send_message(get_phone_number(msg))
 
@@ -82,12 +79,7 @@ def parse_message(msg, cnt):
 		change_trigger_word(cnt, args[0])
 
 
-	# stub
-	if msg.js_obj['isGroupMsg']:
-		group_handler(msg)
-
-
-driver = WhatsAPIDriver(profile=secret.PROFILE)
+driver = WhatsAPIDriver(profile=secret.PROFILE or None)
 print "Waiting for QR"
 driver.wait_for_login()
 
@@ -104,5 +96,5 @@ while True:
 					break
 				elif message.js_obj['type'] == 'chat':
 					parse_message(message, contact)
-	
+
 

@@ -16,8 +16,9 @@ Get a cleverbot key from [here](https://www.cleverbot.com/api/) and add it to `s
 
 Run the script using `python index.py`.
 
-Run the script on whatever browser you're not using so if you're on chrome make sure it's on firefox, also make sure to add 
-a profile so you don't have to scan a QR code every time.
+Run the script on whatever browser you're not using so if you're on chrome run it on firefox, if you're using firefox normally just.. uh... stop using firefox.
+
+Make sure to add a profile so you don't have to scan a QR code every time.
 
 ## Features
 * Talk to alexa by mentioning her name or pinging her (it's actually cleverbot but shhh) and have her 

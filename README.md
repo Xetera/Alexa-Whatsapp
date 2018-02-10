@@ -1,11 +1,14 @@
 # Alexa Whatsapp
 Selenium powered whatsapp bot using this [awesome gentleman's library](https://github.com/mukulhase/WebWhatsAPI)
 
+
+
 ## Setup
 If you're running python3 like most normal people, install Anaconda and create a python2 environment by following 
 [these](https://stackoverflow.com/questions/24405561/how-to-install-2-anacondas-python-2-7-and-3-4-on-mac-os-10-9) instructions. 
 
 Switch to your python2 environment by doing `source activate python2` or just `activate python2` if you're on Windows.
+
 
 
 `pip install webwhatsapi` to install the dependencies.
@@ -39,6 +42,9 @@ meaning that there's a chance that leaving your phone with whatsapp running coul
 ## TODO:
 - [ ] Convert to an event-based system than an infinite while loop for checking messages. 
 Though this is more of a problem with the library rather than the implementation itself.
+
+![example](https://i.gyazo.com/8614f39c9ab545f458422998f91340ca.png)
+
 
 ## Notes
 If possible, this could work a little better with a mobile emulator as it would stop receiving messages less frequently. 

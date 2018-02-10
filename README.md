@@ -9,12 +9,10 @@ If you're running python3 like most normal people, install Anaconda and create a
 
 Switch to your python2 environment by doing `source activate python2` or just `activate python2` if you're on Windows.
 
-
-
 `pip install webwhatsapi` to install the dependencies.
 
-Get a cleverbot key from [here](https://www.cleverbot.com/api/) and add it to `secret.py`
- 
+Get a cleverbot key from [here](https://www.cleverbot.com/api/) and add it to `settings.py`
+
 **Optional**: Get a youtube api key from [here](https://console.developers.google.com/apis) to fetch youtube results.
 
 Run the script using `python index.py`.
@@ -29,6 +27,7 @@ Make sure to add a profile so you don't have to scan a QR code every time.
 * Change the name she is listening for with `!respond <name>`.
 * Fetch youtube video information and the link with `!youtube <video name>`.
 
+
 ## Limitations
 * Your phone must be connected to the internet, if you're already using whatsapp 
 that means the bot has to be running on a separate phone from the one you're using.
@@ -38,6 +37,7 @@ meaning that there's a chance that leaving your phone with whatsapp running coul
 
 * The script must be running with an instance of firefox open at all times which makes it very difficult to host the script in a server.
 
+* Unlikely that you will ever reach this limit but the cleverbot API has a 5000 call limit.
 
 ## TODO:
 - [ ] Convert to an event-based system than an infinite while loop for checking messages. 

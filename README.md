@@ -11,8 +11,13 @@ Switch to your python2 environment by doing `source activate python2` or just `a
 `pip install webwhatsapi` to install the dependencies.
 
 Get a cleverbot key from [here](https://www.cleverbot.com/api/) and add it to `secret.py`
+ 
+**Optional**: Get a youtube api key from [here](https://console.developers.google.com/apis) to fetch youtube results.
 
-run using `python index.py`
+Run the script using `python index.py`.
+
+Run the script on whatever browser you're not using so if you're on chrome make sure it's on firefox, also make sure to add 
+a profile so you don't have to scan a QR code every time.
 
 ## Features
 * Talk to alexa by mentioning her name or pinging her (it's actually cleverbot but shhh) and have her 

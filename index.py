@@ -43,10 +43,7 @@ def parse_audio(msg, cnt):
 
 
 def parse_message(msg, cnt):
-	if not msg.safe_content or msg.safe_content == "":
-		# message is empty. Triggered when messages only contain emojis
-		return
-	elif re.search("({}|@{})".format(constants.TRIGGER_WORD, secret.BOT_PHONE_NUMBER), msg.safe_content, re.IGNORECASE):
+	if re.search("({}|@{})".format(constants.TRIGGER_WORD, secret.BOT_PHONE_NUMBER), msg.safe_content, re.IGNORECASE):
 		# upon hearing trigger word
 		reply = alexa.say(msg.safe_content)
 		cnt.chat.send_message(reply)
@@ -95,6 +92,12 @@ while True:
 					parse_audio(message, contact)
 					break
 				elif message.js_obj['type'] == 'chat':
-					parse_message(message, contact)
+					try:
+						if not message.safe_content or message.safe_content == "":
+							# message is empty. Triggered when messages only contain emojis
+							parse_message(message, contact)
+					except AttributeError as e:
+						print "Warning: ", message, "did not have a a content attribute"
+
 
 
